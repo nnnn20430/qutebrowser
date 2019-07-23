@@ -210,12 +210,11 @@ class TestInitLog:
                                   loglines=10, logfilter="", force_color=False,
                                   json_logging=False)
 
-    def test_stderr_none(self, args):
+    def test_stderr_none(self, monkeypatch, args):
         """Test init_log with sys.stderr = None."""
-        old_stderr = sys.stderr
-        sys.stderr = None
+        monkeypatch.setattr(log.sys, 'stderr', None)
+        monkeypatch.setattr(log, '_missing_stderr', True)
         log.init_log(args)
-        sys.stderr = old_stderr
 
     @pytest.mark.parametrize('logfilter, expected_names, negated', [
         ('!one,two', ['one', 'two'], True),

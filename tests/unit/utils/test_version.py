@@ -843,6 +843,8 @@ def test_chromium_version(monkeypatch, caplog, ua, expected):
     pytest.importorskip('PyQt5.QtWebEngineWidgets')
     if ua is None:
         monkeypatch.setattr(version, 'webenginesettings', None)
+        monkeypatch.setattr(version, 'QWebEngineProfile', None)
+        monkeypatch.setattr(version, 'has_webengine', False)
     else:
         monkeypatch.setattr(version.webenginesettings,
                             'default_user_agent', ua)
@@ -961,7 +963,9 @@ def test_version_output(params, stubs, monkeypatch):
     substitutions['ssl'] = 'SSL VERSION' if params.ssl_support else 'no'
 
     for name, val in patches.items():
-        monkeypatch.setattr('qutebrowser.utils.version.' + name, val)
+        monkeypatch.setattr('qutebrowser.utils.version.' + name,
+                            val,
+                            raising=False)
 
     if params.frozen:
         monkeypatch.setattr(sys, 'frozen', True, raising=False)
