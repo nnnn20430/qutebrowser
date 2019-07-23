@@ -86,7 +86,7 @@ def _apply_platform_markers(config, item):
         ('unicode_locale', sys.getfilesystemencoding() == 'ascii',
          "Skipped because of ASCII locale"),
         ('qtwebkit6021_skip',
-         version.qWebKitVersion and
+         version.has_webkit and
          version.qWebKitVersion() == '602.1',
          "Broken on WebKit 602.1")
     ]
@@ -230,7 +230,7 @@ def check_display(request):
 @pytest.fixture(autouse=True)
 def set_backend(monkeypatch, request):
     """Make sure the backend global is set."""
-    if not request.config.webengine and version.qWebKitVersion:
+    if not request.config.webengine and version.has_webkit:
         backend = usertypes.Backend.QtWebKit
     else:
         backend = usertypes.Backend.QtWebEngine

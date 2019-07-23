@@ -39,17 +39,18 @@ from PyQt5.QtGui import (QOpenGLContext, QOpenGLVersionProfile,
                          QOffscreenSurface)
 from PyQt5.QtWidgets import QApplication
 
+has_webengine = True
+has_webkit = True
+
 try:
     from PyQt5.QtWebKit import qWebKitVersion
 except ImportError:  # pragma: no cover
-    pass
-
-_has_webengine = True
+    has_webkit = False
 
 try:
     from PyQt5.QtWebEngineWidgets import QWebEngineProfile
 except ImportError:  # pragma: no cover
-    _has_webengine = False
+    has_webengine = False
 
 import qutebrowser
 from qutebrowser.utils import log, utils, standarddir, usertypes, message
@@ -59,7 +60,7 @@ from qutebrowser.browser import pdfjs
 try:
     from qutebrowser.browser.webengine import webenginesettings
 except ImportError:  # pragma: no cover
-    _has_webengine = False
+    has_webengine = False
 
 
 @attr.s
@@ -354,7 +355,7 @@ def _chromium_version():
     Also see https://www.chromium.org/developers/calendar
     and https://chromereleases.googleblog.com/
     """
-    if not _has_webengine:
+    if not has_webengine:
         # This should never happen
         return 'unavailable'
     ua = webenginesettings.default_user_agent
