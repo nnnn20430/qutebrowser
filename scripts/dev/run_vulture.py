@@ -118,6 +118,7 @@ def whitelist_generator():  # noqa
         yield 'qutebrowser.config.configfiles.ConfigAPI.' + name
 
     yield 'include_aliases'
+    yield 'qutebrowser.utils.version.has_webkit'
 
     for attr in ['_get_default_metavar_for_optional',
                  '_get_default_metavar_for_positional', '_metavar_formatter']:

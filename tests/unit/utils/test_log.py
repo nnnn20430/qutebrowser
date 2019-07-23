@@ -22,7 +22,6 @@
 import logging
 import argparse
 import itertools
-import sys
 import warnings
 
 import attr
