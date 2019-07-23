@@ -33,11 +33,11 @@ import urllib
 import collections
 import base64
 
+_has_secrets = True
 try:
     import secrets
 except ImportError:
-    # New in Python 3.6
-    secrets = None  # type: ignore
+    _has_secrets = False
 
 from PyQt5.QtCore import QUrlQuery, QUrl, qVersion
 
@@ -432,7 +432,7 @@ def qute_settings(url):
     # Requests to qute://settings/set should only be allowed from
     # qute://settings. As an additional security precaution, we generate a CSRF
     # token to use here.
-    if secrets:
+    if _has_secrets:
         csrf_token = secrets.token_urlsafe()
     else:
         # On Python < 3.6, from secrets.py

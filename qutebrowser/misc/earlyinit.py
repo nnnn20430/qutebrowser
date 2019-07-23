@@ -36,10 +36,11 @@ import traceback
 import signal
 import importlib
 import datetime
+_has_tk = True
 try:
     import tkinter
 except ImportError:
-    tkinter = None  # type: ignore
+    _has_tk = False
 
 # NOTE: No qutebrowser or PyQt import should be done here, as some early
 # initialization needs to take place before that!
@@ -154,7 +155,7 @@ def check_pyqt_core():
         text = text.replace('</b>', '')
         text = text.replace('<br />', '\n')
         text = text.replace('%ERROR%', str(e))
-        if tkinter and '--no-err-windows' not in sys.argv:
+        if _has_tk and '--no-err-windows' not in sys.argv:
             root = tkinter.Tk()
             root.withdraw()
             tkinter.messagebox.showerror("qutebrowser: Fatal error!", text)

@@ -42,6 +42,9 @@ from qutebrowser.misc import earlyinit, crashdialog, ipc
 from qutebrowser.utils import usertypes, standarddir, log, objreg, debug, utils
 
 
+_missing_stderr = sys.__stderr__ is None
+
+
 @attr.s
 class ExceptionInfo:
 
@@ -169,10 +172,10 @@ class CrashHandler(QObject):
         # We use sys.__stderr__ instead of sys.stderr here so this will still
         # work when sys.stderr got replaced, e.g. by "Python Tools for Visual
         # Studio".
-        if sys.__stderr__ is not None:
+        if not _missing_stderr:
             faulthandler.enable(sys.__stderr__)
         else:
-            faulthandler.disable()  # type: ignore
+            faulthandler.disable()
         try:
             self._crash_log_file.close()
             os.remove(self._crash_log_file.name)

@@ -24,6 +24,8 @@ This should import and run fine with both python2 and python3.
 
 import sys
 
+_has_tk = True
+
 try:
     # Python3
     from tkinter import Tk, messagebox
@@ -34,8 +36,7 @@ except ImportError:  # pragma: no cover
         import tkMessageBox as messagebox  # type: ignore  # noqa: N813
     except ImportError:
         # Some Python without Tk
-        Tk = None  # type: ignore
-        messagebox = None  # type: ignore
+        _has_tk = False
 
 
 # First we check the version of Python. This code should run fine with python2
@@ -49,8 +50,7 @@ def check_python_version():
         version_str = '.'.join(map(str, sys.version_info[:3]))
         text = ("At least Python 3.5 is required to run qutebrowser, but " +
                 "it's running with " + version_str + ".\n")
-        if (Tk and  # type: ignore
-                '--no-err-windows' not in sys.argv):  # pragma: no cover
+        if _has_tk and '--no-err-windows' not in sys.argv:  # pragma: no cover
             root = Tk()
             root.withdraw()
             messagebox.showerror("qutebrowser: Fatal error!", text)
